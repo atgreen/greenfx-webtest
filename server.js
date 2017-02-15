@@ -3,8 +3,17 @@ var express = require('express'),
     fs      = require('fs'),
     app     = express(),
     eps     = require('ejs'),
+    stomp   = require('stomp-client'),
     morgan  = require('morgan');
-    
+
+var destination = '/queue/OANDA.TICK';
+var client = new stomp('broker-amq-stomp', 61313, 'user', 'password');
+client.connect(function(sessionId) {
+    client.subscribe(destination, function(body, headers) {
+	console.log('This is the body of a message on the subscribed queue:', body);
+    });
+});
+
 Object.assign=require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
