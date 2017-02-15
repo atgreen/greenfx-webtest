@@ -8,9 +8,10 @@ var express = require('express'),
 
 var destination = '/topic/OANDA.TICK';
 var client = new stomp('172.30.69.150', 61613, 'user', 'password');
+var last_tick;
 client.connect(function(sessionId) {
     client.subscribe(destination, function(body, headers) {
-	console.log('This is the body of a message on the subscribed queue:', body);
+	last_tick = body;
     });
 });
 
@@ -23,7 +24,8 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 
 app.get('/', function (req, res) {
-  res.render('fx.html', { pageCountMessage : null});
+    res.setHeader('Content-Type', 'application/json');
+    res.send(last_tick);
 });
 
 // error handling
