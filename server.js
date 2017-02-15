@@ -7,7 +7,7 @@ var express = require('express'),
     morgan  = require('morgan');
 
 var destination = '/topic/OANDA.TICK';
-var client = new stomp('broker-amq-stomp', 61613, 'user', 'password');
+var client = new stomp('172.30.69.150', 61613, 'user', 'password');
 client.connect(function(sessionId) {
     client.subscribe(destination, function(body, headers) {
 	console.log('This is the body of a message on the subscribed queue:', body);
