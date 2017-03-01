@@ -8,6 +8,7 @@ var express = require('express'),
 
 var destination = '/topic/OANDA.TICK';
 var client = new stomp('broker-amq-stomp', 61613, 'user', 'password');
+
 var last_tick;
 client.connect(function(sessionId) {
     client.subscribe(destination, function(body, headers) {
